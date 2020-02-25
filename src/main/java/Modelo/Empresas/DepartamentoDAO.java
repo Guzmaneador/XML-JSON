@@ -1,0 +1,87 @@
+package Modelo.Empresas;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.xmldb.api.base.Resource;
+import org.xmldb.api.base.ResourceIterator;
+import org.xmldb.api.base.ResourceSet;
+import org.xmldb.api.base.XMLDBException;
+import org.xmldb.api.modules.XPathQueryService;
+
+/**
+ *
+ * @author munchi
+ */
+public class DepartamentoDAO {
+        ConexionEmpresas cxEmp= new ConexionEmpresas();
+        
+    
+    public void insertarDepartamento(DepartamentoVO departamento){
+           try {
+                XPathQueryService xpqs = cxEmp.getConexion();
+                String insertar ="update insert <departamento> "
+                        + "<numero>"+departamento.getNumero()+"</numero> "
+                        + "<nombre>"+departamento.getNombre()+"</nombre> "
+                        + "<ubicacion>"+departamento.getUbicacion()+"</ubicacion> "
+                        + "</departamento>\n into /departamentos";
+                ResourceSet result = xpqs.query(insertar);
+            } catch (XMLDBException ex) {
+                Logger.getLogger(DepartamentoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    public void borrar(String numero){
+            try {
+                XPathQueryService xpqs = cxEmp.getConexion();
+                String borrado = "update delete //departamento[numero='"+numero+"']";
+                ResourceSet result = xpqs.query(borrado);
+            } catch (XMLDBException ex) {
+                Logger.getLogger(DepartamentoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    
+    public DepartamentoVO buscar(String numero){
+        DepartamentoVO departamento= new DepartamentoVO();
+            try {
+                XPathQueryService xpqs = cxEmp.getConexion();
+                String buscarNombre = "//departamento[numero='"+numero+"']/nombre/text()";
+                
+                ResourceSet result = xpqs.query(buscarNombre);
+                ResourceIterator i = result.getIterator();
+                Resource res = i.nextResource();
+                departamento.setNombre((String) res.getContent());
+                
+                String buscarUbicacion = "//departamento[numero='"+numero+"']/ubicacion/text()";
+                result = xpqs.query(buscarUbicacion);
+                i = result.getIterator();
+                res = i.nextResource();
+                departamento.setUbicacion((String) res.getContent());
+
+
+//                while(i.hasMoreResources()){
+//                    res = i.nextResource();
+//                    System.out.println(res.getContent());
+//                }
+//                result.toString();
+                
+            } catch (XMLDBException ex) {
+                Logger.getLogger(DepartamentoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        return departamento;
+    }
+
+    public void actualizar(DepartamentoVO departamento) {
+            try {
+                XPathQueryService xpqs = cxEmp.getConexion();
+                String actualizar = "update replace //departamento[numero='"+departamento.getNumero()+"'] with "
+                    +"<departamento> "
+                        + "<numero>"+departamento.getNumero()+"</numero> "
+                        + "<nombre>"+departamento.getNombre()+"</nombre> "
+                        + "<ubicacion>"+departamento.getUbicacion()+"</ubicacion> "
+                    + "</departamento>\n";
+                xpqs.query(actualizar); 
+            } catch (XMLDBException ex) {
+                Logger.getLogger(DepartamentoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+    }
+}
