@@ -46,5 +46,10 @@ public class ControladorImpl implements Controlador{
     public void actualizarDepartamento(DepartamentoVO departamento) {
         modelo.actualizarDepartamento(departamento);
     }
+
+    @Override
+    public void obtenerHTML() {
+       modelo.obtenerHTML();
+    }
     
 }

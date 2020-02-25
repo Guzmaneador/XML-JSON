@@ -17,5 +17,7 @@ public interface Controlador {
 
     public void actualizarDepartamento(DepartamentoVO recogerDatos);
 
+    public void obtenerHTML();
+
     
 }

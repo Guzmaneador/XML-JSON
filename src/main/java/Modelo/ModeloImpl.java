@@ -29,6 +29,11 @@ public class ModeloImpl implements Modelo{
     public void actualizarDepartamento(DepartamentoVO departamento) {
         departamentodao.actualizar(departamento);
     }
+
+    @Override
+    public void obtenerHTML() {
+       departamentodao.obtenerHTML();
+    }
     
    
 

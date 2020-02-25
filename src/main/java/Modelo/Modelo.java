@@ -18,6 +18,8 @@ public interface Modelo {
     public DepartamentoVO buscarDepartamento(String numero);
 
     public void actualizarDepartamento(DepartamentoVO departamento);
+
+    public void obtenerHTML();
    
     
 }

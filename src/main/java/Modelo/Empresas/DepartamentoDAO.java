@@ -84,4 +84,28 @@ public class DepartamentoDAO {
             }
         
     }
+    public void obtenerHTML(){
+            try {
+                XPathQueryService xpqs = cxEmp.getConexion();
+                String consultaHTML = "<table> {\n" +
+                        "  for $departamento in /departamentos/departamento\n" +
+                        "  return <tr><td>{$departamento/numero/text()}</td><td>{$departamento/nombre/text()}</td><td>{$departamento/ubicacion/text()}</td></tr>\n" +
+                        "} </table>";
+                ResourceSet result = xpqs.query(consultaHTML);
+                ResourceIterator i = result.getIterator();
+                Resource res = null;
+
+                while(i.hasMoreResources()){
+                    res = i.nextResource();
+                    System.out.println(res.getContent());
+                }
+                result.toString();
+            } catch (XMLDBException ex) {
+                Logger.getLogger(DepartamentoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
 }
+//<table> {
+//  for $departamento in /departamentos/departamento
+//  return <tr><td>{$departamento/numero/text()}</td><td>{$departamento/nombre/text()}</td><td>{$departamento/ubicacion/text()}</td></tr>
+//} </table>
