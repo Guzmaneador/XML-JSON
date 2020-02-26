@@ -20,6 +20,8 @@ public interface Modelo {
     public void actualizarDepartamento(DepartamentoVO departamento);
 
     public void obtenerHTML();
+
+    public void transoformarEnJSON();
    
     
 }

@@ -34,6 +34,11 @@ public class ModeloImpl implements Modelo{
     public void obtenerHTML() {
        departamentodao.obtenerHTML();
     }
+
+    @Override
+    public void transoformarEnJSON() {
+        departamentodao.transoformarEnJSON();
+    }
     
    
 

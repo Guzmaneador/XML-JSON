@@ -19,5 +19,7 @@ public interface Controlador {
 
     public void obtenerHTML();
 
+    public void transoformarEnJSON();
+
     
 }

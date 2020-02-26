@@ -51,5 +51,10 @@ public class ControladorImpl implements Controlador{
     public void obtenerHTML() {
        modelo.obtenerHTML();
     }
+
+    @Override
+    public void transoformarEnJSON() {
+       modelo.transoformarEnJSON();
+    }
     
 }

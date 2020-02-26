@@ -1,7 +1,12 @@
 package Modelo.Empresas;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.JSONObject;
+import org.json.XML;
 import org.xmldb.api.base.Resource;
 import org.xmldb.api.base.ResourceIterator;
 import org.xmldb.api.base.ResourceSet;
@@ -86,6 +91,8 @@ public class DepartamentoDAO {
     }
     public void obtenerHTML(){
             try {
+                FileWriter fichero = new FileWriter("departamentos.html");
+                PrintWriter pw = new PrintWriter(fichero);
                 XPathQueryService xpqs = cxEmp.getConexion();
                 String consultaHTML = "<table> {\n" +
                         "  for $departamento in /departamentos/departamento\n" +
@@ -97,15 +104,38 @@ public class DepartamentoDAO {
 
                 while(i.hasMoreResources()){
                     res = i.nextResource();
+                    pw.println(res.getContent());
                     System.out.println(res.getContent());
                 }
-                result.toString();
+                pw.close();
+                fichero.close();
+                
+//                result.toString();
+            } catch (XMLDBException ex) {
+                Logger.getLogger(DepartamentoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(DepartamentoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+
+    public void transoformarEnJSON(){
+            try {
+                XPathQueryService xpqs = cxEmp.getConexion();
+                String consultaHTML = "/departamentos";
+                ResourceSet result = xpqs.query(consultaHTML);
+                ResourceIterator i = result.getIterator();
+                Resource res = null;
+                String cadenaXml="<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>";
+
+                while(i.hasMoreResources()){
+                    res = i.nextResource();
+                    cadenaXml +=res.getContent();
+                }
+                	JSONObject jsonObj = XML.toJSONObject(cadenaXml);
+			String json = jsonObj.toString(4);//???
+			System.out.println(json);
             } catch (XMLDBException ex) {
                 Logger.getLogger(DepartamentoDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
 }
-//<table> {
-//  for $departamento in /departamentos/departamento
-//  return <tr><td>{$departamento/numero/text()}</td><td>{$departamento/nombre/text()}</td><td>{$departamento/ubicacion/text()}</td></tr>
-//} </table>
