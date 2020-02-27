@@ -16,7 +16,6 @@ import Vista.VistaImpl;
 public class Main {
     public static void main(String[] args) {
 
-        new MongoConexion(); 
         
         Modelo modelo = new ModeloImpl();
         Vista vista = new VistaImpl();

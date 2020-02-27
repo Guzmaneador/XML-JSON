@@ -56,5 +56,25 @@ public class ControladorImpl implements Controlador{
     public void transoformarEnJSON() {
        modelo.transoformarEnJSON();
     }
+    ////JSON///
+    @Override
+    public DepartamentoVO buscarDepartamentoJson(String numero) {
+       return modelo.buscarDepartamentoJson(numero);
+    }
+
+    @Override
+    public void insertarDepartamentoJson(DepartamentoVO departamento) {
+         modelo.insertarDepartamentoJson(departamento);
+    }
+
+    @Override
+    public void borrarDepartamentoJson(String numero) {
+       modelo.borrarDepartamentoJson(numero);
+    }
+
+    @Override
+    public void actualizarDepartamentoJson(DepartamentoVO departamento) {
+        modelo.actualizarDepartamentoJson(departamento);
+    }
     
 }

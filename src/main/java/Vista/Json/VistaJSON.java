@@ -164,19 +164,19 @@ public class VistaJSON extends javax.swing.JFrame implements Vista {
     }// </editor-fold>//GEN-END:initComponents
 
     private void añadirBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_añadirBActionPerformed
-        controlador.insertarDepartamento(recogerDatos());
+        controlador.insertarDepartamentoJson(recogerDatos());
     }//GEN-LAST:event_añadirBActionPerformed
 
     private void borrarBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarBActionPerformed
-        controlador.borrarDepartamento(numeroTF.getText());
+        controlador.borrarDepartamentoJson(numeroTF.getText());
     }//GEN-LAST:event_borrarBActionPerformed
 
     private void buscarBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarBActionPerformed
-        mostrarDatos(controlador.buscarDepartamento(numeroTF.getText()));
+        mostrarDatos(controlador.buscarDepartamentoJson(numeroTF.getText()));
     }//GEN-LAST:event_buscarBActionPerformed
 
     private void editarBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarBActionPerformed
-        controlador.actualizarDepartamento(recogerDatos());
+        controlador.actualizarDepartamentoJson(recogerDatos());
     }//GEN-LAST:event_editarBActionPerformed
 
 

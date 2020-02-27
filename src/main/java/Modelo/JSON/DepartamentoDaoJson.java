@@ -1,6 +1,11 @@
 package Modelo.JSON;
 
 import Modelo.Empresas.*;
+import com.mongodb.BasicDBObjectBuilder;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.WriteResult;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,124 +24,60 @@ import org.xmldb.api.modules.XPathQueryService;
  * @author munchi
  */
 public class DepartamentoDaoJson {
-        ConexionEmpresas cxEmp= new ConexionEmpresas();
+//        ConexionEmpresas cxEmp= new ConexionEmpresas();
+        MongoConexion cxMG = new MongoConexion();
         
     
-    public void insertarDepartamento(DepartamentoVO departamento){
-           try {
-                XPathQueryService xpqs = cxEmp.getConexion();
-                String insertar ="update insert <departamento> "
-                        + "<numero>"+departamento.getNumero()+"</numero> "
-                        + "<nombre>"+departamento.getNombre()+"</nombre> "
-                        + "<ubicacion>"+departamento.getUbicacion()+"</ubicacion> "
-                        + "</departamento>\n into /departamentos";
-                ResourceSet result = xpqs.query(insertar);
-            } catch (XMLDBException ex) {
-                Logger.getLogger(DepartamentoDaoJson.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    public void insertarDepartamentoJson(DepartamentoVO departamento){
+//        DepartamentoVO departamentoInsert= new DepartamentoVO();
+        DBObject doc = createDBObject(departamento);
+        DBCollection dbDepartamento= cxMG.getDepartamenosConexion();
+        WriteResult result = dbDepartamento.insert(doc);
+        System.out.println(result.getUpsertedId());
+        System.out.println(result.getN());
+        System.out.println(result.isUpdateOfExisting());
+        System.out.println(result.getLastConcern());
     }
-    public void borrar(String numero){
-            try {
-                XPathQueryService xpqs = cxEmp.getConexion();
-                String borrado = "update delete //departamento[numero='"+numero+"']";
-                ResourceSet result = xpqs.query(borrado);
-            } catch (XMLDBException ex) {
-                Logger.getLogger(DepartamentoDaoJson.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    private static DBObject createDBObject(DepartamentoVO departamento) {
+        BasicDBObjectBuilder docBuilder = BasicDBObjectBuilder.start();
+
+        docBuilder.append("numero", Double.parseDouble(departamento.getNumero()));
+        docBuilder.append("nombre", departamento.getNombre());
+        docBuilder.append("ubicacion", departamento.getUbicacion());
+
+        return docBuilder.get();
+	}
+    public void borrarJson(String numero){
+        DBCollection dbDepartamento= cxMG.getDepartamenosConexion();
+        DBObject query = BasicDBObjectBuilder.start().add("numero", Double.parseDouble(numero)).get();
+        WriteResult result = dbDepartamento.remove(query);
+        System.out.println(result.getUpsertedId());
+        System.out.println(result.getN());
+        System.out.println(result.isUpdateOfExisting());
+        System.out.println(result.getLastConcern());
     }
     
-    public DepartamentoVO buscar(String numero){
+    public DepartamentoVO buscarJson(String numero){
         DepartamentoVO departamento= new DepartamentoVO();
-            try {
-                XPathQueryService xpqs = cxEmp.getConexion();
-                String buscarNombre = "//departamento[numero='"+numero+"']/nombre/text()";
+        DBCollection dbDepartamento= cxMG.getDepartamenosConexion();
+        DBObject query = BasicDBObjectBuilder.start().add("numero", Double.parseDouble(numero)).get();
+        DBCursor cursor = dbDepartamento.find(query);
+        System.out.println("");
+        while(cursor.hasNext()){
+                System.out.println(cursor.next());
+//                System.out.println(cursor.batchSize(1));
+//                System.out.println(cursor.hint("numero"));
                 
-                ResourceSet result = xpqs.query(buscarNombre);
-                ResourceIterator i = result.getIterator();
-                Resource res = i.nextResource();
-                departamento.setNombre((String) res.getContent());
-                
-                String buscarUbicacion = "//departamento[numero='"+numero+"']/ubicacion/text()";
-                result = xpqs.query(buscarUbicacion);
-                i = result.getIterator();
-                res = i.nextResource();
-                departamento.setUbicacion((String) res.getContent());
-
-
-//                while(i.hasMoreResources()){
-//                    res = i.nextResource();
-//                    System.out.println(res.getContent());
-//                }
-//                result.toString();
-                
-            } catch (XMLDBException ex) {
-                Logger.getLogger(DepartamentoDaoJson.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        }
         return departamento;
     }
 
-    public void actualizar(DepartamentoVO departamento) {
-            try {
-                XPathQueryService xpqs = cxEmp.getConexion();
-                String actualizar = "update replace //departamento[numero='"+departamento.getNumero()+"'] with "
-                    +"<departamento> "
-                        + "<numero>"+departamento.getNumero()+"</numero> "
-                        + "<nombre>"+departamento.getNombre()+"</nombre> "
-                        + "<ubicacion>"+departamento.getUbicacion()+"</ubicacion> "
-                    + "</departamento>\n";
-                xpqs.query(actualizar); 
-            } catch (XMLDBException ex) {
-                Logger.getLogger(DepartamentoDaoJson.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        
+    public void actualizarJson(DepartamentoVO departamento) {
+                DBCollection dbDepartamento= cxMG.getDepartamenosConexion();
+                DBObject query = BasicDBObjectBuilder.start().add("numero", Double.parseDouble(departamento.getNumero())).get();
+		DBObject doc = createDBObject(departamento);
+		WriteResult result = dbDepartamento.update(query, doc);   
     }
-    public void obtenerHTML(){
-            try {
-                FileWriter fichero = new FileWriter("departamentos.html");
-                PrintWriter pw = new PrintWriter(fichero);
-                XPathQueryService xpqs = cxEmp.getConexion();
-                String consultaHTML = "<table> {\n" +
-                        "  for $departamento in /departamentos/departamento\n" +
-                        "  return <tr><td>{$departamento/numero/text()}</td><td>{$departamento/nombre/text()}</td><td>{$departamento/ubicacion/text()}</td></tr>\n" +
-                        "} </table>";
-                ResourceSet result = xpqs.query(consultaHTML);
-                ResourceIterator i = result.getIterator();
-                Resource res = null;
+   
 
-                while(i.hasMoreResources()){
-                    res = i.nextResource();
-                    pw.println(res.getContent());
-                    System.out.println(res.getContent());
-                }
-                pw.close();
-                fichero.close();
-                
-//                result.toString();
-            } catch (XMLDBException ex) {
-                Logger.getLogger(DepartamentoDaoJson.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(DepartamentoDaoJson.class.getName()).log(Level.SEVERE, null, ex);
-            }
-    }
-
-    public void transoformarEnJSON(){
-            try {
-                XPathQueryService xpqs = cxEmp.getConexion();
-                String consultaHTML = "/departamentos";
-                ResourceSet result = xpqs.query(consultaHTML);
-                ResourceIterator i = result.getIterator();
-                Resource res = null;
-                String cadenaXml="<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>";
-
-                while(i.hasMoreResources()){
-                    res = i.nextResource();
-                    cadenaXml +=res.getContent();
-                }
-                	JSONObject jsonObj = XML.toJSONObject(cadenaXml);
-			String json = jsonObj.toString(4);//???
-			System.out.println(json);
-            } catch (XMLDBException ex) {
-                Logger.getLogger(DepartamentoDaoJson.class.getName()).log(Level.SEVERE, null, ex);
-            }
-    }
 }

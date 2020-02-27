@@ -2,6 +2,7 @@ package Modelo;
 
 import Modelo.Empresas.DepartamentoDAO;
 import Modelo.Empresas.DepartamentoVO;
+import Modelo.JSON.DepartamentoDaoJson;
 
 /**
  *
@@ -38,6 +39,28 @@ public class ModeloImpl implements Modelo{
     @Override
     public void transoformarEnJSON() {
         departamentodao.transoformarEnJSON();
+    }
+    //JSONO--------------
+    DepartamentoDaoJson departamentodaoJson= new DepartamentoDaoJson();
+    
+    @Override
+    public DepartamentoVO buscarDepartamentoJson(String numero) {
+       return departamentodaoJson.buscarJson(numero);
+    }
+
+    @Override
+    public void insertarDepartamentoJson(DepartamentoVO departamento) {
+      departamentodaoJson.insertarDepartamentoJson(departamento);
+    }
+
+    @Override
+    public void borrarDepartamentoJson(String numero) {
+       departamentodaoJson.borrarJson(numero);
+    }
+
+    @Override
+    public void actualizarDepartamentoJson(DepartamentoVO departamento) {
+        departamentodaoJson.actualizarJson(departamento);
     }
     
    

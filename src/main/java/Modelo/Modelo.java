@@ -22,6 +22,14 @@ public interface Modelo {
     public void obtenerHTML();
 
     public void transoformarEnJSON();
+
+    public DepartamentoVO buscarDepartamentoJson(String numero);
+
+    public void insertarDepartamentoJson(DepartamentoVO departamento);
+
+    public void borrarDepartamentoJson(String numero);
+
+    public void actualizarDepartamentoJson(DepartamentoVO departamento);
    
     
 }

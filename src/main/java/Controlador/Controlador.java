@@ -21,5 +21,13 @@ public interface Controlador {
 
     public void transoformarEnJSON();
 
+    public DepartamentoVO buscarDepartamentoJson(String text);
+
+    public void insertarDepartamentoJson(DepartamentoVO recogerDatos);
+
+    public void borrarDepartamentoJson(String text);
+
+    public void actualizarDepartamentoJson(DepartamentoVO recogerDatos);
+
     
 }
