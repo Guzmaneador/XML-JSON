@@ -94,19 +94,30 @@ public class DepartamentoDAO {
                 FileWriter fichero = new FileWriter("departamentos.html");
                 PrintWriter pw = new PrintWriter(fichero);
                 XPathQueryService xpqs = cxEmp.getConexion();
-                String consultaHTML = "<table> {\n" +
+                String consultaHTML = "<table class=\"table table-hover\"> {\n" +
                         "  for $departamento in /departamentos/departamento\n" +
                         "  return <tr><td>{$departamento/numero/text()}</td><td>{$departamento/nombre/text()}</td><td>{$departamento/ubicacion/text()}</td></tr>\n" +
                         "} </table>";
+                String prueba = "<HTML><head>  <meta charset=\"utf-8\">\n" +
+                "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" +
+                "  <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css\">\n" +
+                "  <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js\"></script>\n" +
+                "  <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js\"></script></head><body>"+ 
+                "<div class=\"container\">";
                 ResourceSet result = xpqs.query(consultaHTML);
                 ResourceIterator i = result.getIterator();
                 Resource res = null;
 
                 while(i.hasMoreResources()){
                     res = i.nextResource();
-                    pw.println(res.getContent());
-                    System.out.println(res.getContent());
+//                    pw.println(res.getContent());
+//                    System.out.println(res.getContent());
+                    prueba += res.getContent();
                 }
+                
+                prueba += "</div></body></html>";
+                                    pw.println(prueba);
+                System.out.println(prueba);
                 pw.close();
                 fichero.close();
                 

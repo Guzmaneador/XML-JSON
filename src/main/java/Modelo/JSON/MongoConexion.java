@@ -20,8 +20,6 @@ public class MongoConexion {
         try {
             mongoClient = new MongoClient( "localhost" , 27017 );
              db =mongoClient.getDB("empresas");
-//            List<String> dbs = mongoClient.getDatabaseNames();
-//            System.out.println(dbs);
         } catch (UnknownHostException ex) {
             Logger.getLogger(MongoConexion.class.getName()).log(Level.SEVERE, null, ex);
         }

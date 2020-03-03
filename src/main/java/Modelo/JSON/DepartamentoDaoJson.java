@@ -6,18 +6,6 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.WriteResult;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.json.JSONObject;
-import org.json.XML;
-import org.xmldb.api.base.Resource;
-import org.xmldb.api.base.ResourceIterator;
-import org.xmldb.api.base.ResourceSet;
-import org.xmldb.api.base.XMLDBException;
-import org.xmldb.api.modules.XPathQueryService;
 
 /**
  *
@@ -65,9 +53,7 @@ public class DepartamentoDaoJson {
         System.out.println("");
         while(cursor.hasNext()){
                 System.out.println(cursor.next());
-//                System.out.println(cursor.batchSize(1));
-//                System.out.println(cursor.hint("numero"));
-                
+         
         }
         return departamento;
     }
